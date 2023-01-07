@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CallbacksController;
 use App\Http\Controllers\ChargesController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::middleware(['basic_auth'])->group(function () {
-    Route::post('/charges', [ChargesController::class, 'create']);
+    Route::post('/charges', [
+        ChargesController::class,
+        'create'
+    ]);
 });
+
+Route::get('/callbacks/{merchantId}', [
+    CallbacksController::class,
+    'verify'
+])->name('callbacks.verify');

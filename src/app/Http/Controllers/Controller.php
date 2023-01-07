@@ -24,11 +24,22 @@ class Controller extends BaseController
         $this->merchantsService = $merchantsService;
 
         $this->middleware(function (Request $request, Closure $next) {
-            $merchantId = $request->attributes->get('merchantId');
+            $merchantId = $request->route('merchantId');
+
+            if ($merchantId === null) {
+                $merchantId = $request->attributes->get('merchantId');
+            }
+
             $merchantId = intval($merchantId);
+
             $this->merchant = $this->merchantsService->findById($merchantId);
 
             return $next($request);
         });
+    }
+
+    protected function isTestEnvironment(): bool
+    {
+        return (bool)config('app.is_test', true);
     }
 }

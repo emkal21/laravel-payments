@@ -4,9 +4,6 @@ namespace App\Responses;
 
 class EntityNotFoundResponse extends ErrorResponse
 {
-    /** @var int $httpStatus */
-    protected $httpStatus = 404;
-
     /** @var string $message */
     protected $message;
 
@@ -18,5 +15,13 @@ class EntityNotFoundResponse extends ErrorResponse
         parent::__construct([$message]);
 
         $this->message = $message;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getHttpStatus(): int
+    {
+        return 404;
     }
 }

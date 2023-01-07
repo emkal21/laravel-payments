@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'is_test' => env('IS_TEST', true),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

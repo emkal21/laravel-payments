@@ -4,9 +4,6 @@ namespace App\Responses;
 
 class ErrorResponse extends BaseResponse
 {
-    /** @var int $httpStatus */
-    protected $httpStatus = 422;
-
     /* @var string[] $errors */
     protected $errors = [];
 
@@ -21,5 +18,13 @@ class ErrorResponse extends BaseResponse
     protected function getPayload(): array
     {
         return ['errors' => $this->errors];
+    }
+
+    /**
+     * @return int
+     */
+    protected function getHttpStatus(): int
+    {
+        return 422;
     }
 }

@@ -4,9 +4,6 @@ namespace App\Responses;
 
 class NotAuthenticatedResponse extends ErrorResponse
 {
-    /** @var int $httpStatus */
-    protected $httpStatus = 401;
-
     /** @var string $message */
     protected $message;
 
@@ -19,5 +16,13 @@ class NotAuthenticatedResponse extends ErrorResponse
         parent::__construct([$message]);
 
         $this->message = $message;
+    }
+
+    /**
+     * @return int
+     */
+    protected function getHttpStatus(): int
+    {
+        return 401;
     }
 }

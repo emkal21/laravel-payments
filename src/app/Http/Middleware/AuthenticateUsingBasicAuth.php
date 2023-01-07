@@ -63,7 +63,7 @@ class AuthenticateUsingBasicAuth
             );
 
             if ($isVerified && !$apiToken->isExpired()) {
-                $request->attributes->add(['merchantId' => $merchant->getId()]);
+                $request->attributes->add(['merchantId' => $merchantId]);
 
                 return $next($request);
             }
