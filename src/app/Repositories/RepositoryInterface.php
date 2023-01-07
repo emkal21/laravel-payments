@@ -26,6 +26,13 @@ interface RepositoryInterface
     public function findByField(string $field, $value);
 
     /**
+     * @param string $field
+     * @param mixed $value
+     * @return T|null
+     */
+    public function getByField(string $field, $value);
+
+    /**
      * @param T $entity
      * @return T
      */

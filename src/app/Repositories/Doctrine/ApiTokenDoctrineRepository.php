@@ -16,11 +16,11 @@ class ApiTokenDoctrineRepository extends AbstractDoctrineRepository implements A
     }
 
     /**
-     * @param string $token
-     * @return ApiToken|null
+     * @param int $merchantId
+     * @return ApiToken[]
      */
-    public function findByToken(string $token): ?ApiToken
+    public function getByMerchantId(int $merchantId): array
     {
-        return $this->findByField('token', $token);
+        return $this->getByField('merchantId', $merchantId);
     }
 }

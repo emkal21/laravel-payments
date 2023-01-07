@@ -89,6 +89,12 @@ class InitializeMerchants extends Command
             ''
         );
 
+        $username = Arr::get(
+            $data,
+            'username',
+            ''
+        );
+
         $preferredPaymentService = Arr::get(
             $data,
             'preferredPaymentService',
@@ -103,6 +109,7 @@ class InitializeMerchants extends Command
 
         $merchant = new Merchant(
             $name,
+            $username,
             $preferredPaymentService,
             $paymentServiceSecretKey
         );
@@ -141,8 +148,9 @@ class InitializeMerchants extends Command
 
         $merchantCredentials = [];
         $nameHeading = 'name';
+        $usernameHeading = 'username';
         $apiTokenHeading = 'apiToken';
-        $tableHeadings = [$nameHeading, $apiTokenHeading];
+        $tableHeadings = [$nameHeading, $usernameHeading, $apiTokenHeading];
 
         foreach ($merchants as $merchantData) {
             $merchant = $this->createMerchant($merchantData);
@@ -150,6 +158,7 @@ class InitializeMerchants extends Command
 
             $merchantCredentials[] = [
                 $nameHeading => $merchant->getName(),
+                $usernameHeading => $merchant->getUsername(),
                 $apiTokenHeading => $apiToken->getToken(),
             ];
         }

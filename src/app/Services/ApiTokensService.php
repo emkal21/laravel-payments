@@ -39,12 +39,12 @@ class ApiTokensService
     }
 
     /**
-     * @param string $token
-     * @return ApiToken|null
+     * @param int $merchantId
+     * @return ApiToken[]
      */
-    public function findByToken(string $token): ?ApiToken
+    public function getByMerchantId(int $merchantId): array
     {
-        return $this->apiTokenRepository->findByToken($token);
+        return $this->apiTokenRepository->getByMerchantId($merchantId);
     }
 
     /**

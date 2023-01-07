@@ -33,6 +33,15 @@ class MerchantsService
     }
 
     /**
+     * @param string $username
+     * @return Merchant|null
+     */
+    public function findByUsername(string $username): ?Merchant
+    {
+        return $this->merchantRepository->findByUsername($username);
+    }
+
+    /**
      * @param Merchant $merchant
      * @return Merchant
      */

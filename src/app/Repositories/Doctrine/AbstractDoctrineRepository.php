@@ -61,13 +61,9 @@ abstract class AbstractDoctrineRepository implements RepositoryInterface
      */
     public function findByField(string $field, $value)
     {
-        $queryBuilder = $this
-            ->getQueryBuilderForEntity()
-            ->andWhere('entity.' . $field . ' = :value')
+        $results = $this
+            ->getQueryBuilderForField($field, $value)
             ->setMaxResults(1)
-            ->setParameter('value', $value);
-
-        $results = $queryBuilder
             ->getQuery()
             ->getResult();
 
@@ -76,6 +72,19 @@ abstract class AbstractDoctrineRepository implements RepositoryInterface
         }
 
         return $results[0];
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @return T[]
+     */
+    public function getByField(string $field, $value): array
+    {
+        return $this
+            ->getQueryBuilderForField($field, $value)
+            ->getQuery()
+            ->getResult();
     }
 
     /**
@@ -106,6 +115,21 @@ abstract class AbstractDoctrineRepository implements RepositoryInterface
     private function getQueryBuilderForEntity(): QueryBuilder
     {
         return $this->repository->createQueryBuilder('entity');
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @return QueryBuilder
+     */
+    private function getQueryBuilderForField(
+        string $field,
+        $value
+    ): QueryBuilder {
+        return $this
+            ->getQueryBuilderForEntity()
+            ->andWhere('entity.' . $field . ' = :value')
+            ->setParameter('value', $value);
     }
 
     /**

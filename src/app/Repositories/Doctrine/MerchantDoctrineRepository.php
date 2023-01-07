@@ -14,4 +14,13 @@ class MerchantDoctrineRepository extends AbstractDoctrineRepository implements M
     {
         return Merchant::class;
     }
+
+    /**
+     * @param string $username
+     * @return Merchant|null
+     */
+    public function findByUsername(string $username): ?Merchant
+    {
+        return $this->findByField('username', $username);
+    }
 }

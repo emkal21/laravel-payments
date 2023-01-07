@@ -9,9 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="api_tokens",
- *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="token_hash_unique", columns={"token_hash"})
- *     },
  *     indexes={
  *         @ORM\Index(name="merchant_id_idx", columns={"merchant_id"})
  *     }
@@ -123,5 +120,15 @@ class ApiToken extends AbstractEntity
     public function setToken(?string $token): void
     {
         $this->token = $token;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isExpired(): bool
+    {
+        $currentDateTime = new DateTime();
+
+        return $currentDateTime > $this->getExpiresAt();
     }
 }

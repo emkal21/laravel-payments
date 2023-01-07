@@ -8,7 +8,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="merchants")
+ * @ORM\Table(
+ *     name="merchants",
+ *     uniqueConstraints={
+ *         @ORM\UniqueConstraint(name="username_unique", columns={"username"})
+ *     },
+ * )
  */
 class Merchant extends AbstractEntity
 {
@@ -17,6 +22,12 @@ class Merchant extends AbstractEntity
      * @var string
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string")
+     * @var string
+     */
+    private $username;
 
     /**
      * @ORM\Column(type="string")
@@ -32,18 +43,21 @@ class Merchant extends AbstractEntity
 
     /**
      * @param string $name
+     * @param string $username
      * @param string $preferredPaymentService
      * @param string $paymentServiceSecretKey
      * @throws IllegalArgumentException
      */
     public function __construct(
         string $name,
+        string $username,
         string $preferredPaymentService,
         string $paymentServiceSecretKey
     ) {
         $this->checkPreferredPaymentService($preferredPaymentService);
 
         $this->name = $name;
+        $this->username = $username;
         $this->preferredPaymentService = $preferredPaymentService;
         $this->paymentServiceSecretKey = $paymentServiceSecretKey;
     }
@@ -62,6 +76,22 @@ class Merchant extends AbstractEntity
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
     }
 
     /**

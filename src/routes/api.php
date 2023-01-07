@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\ChargesController;
-use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [StatusController::class, 'index']);
-Route::get('/charges', [ChargesController::class, 'create']);
+Route::middleware(['basic_auth'])->group(function () {
+    Route::post('/charges', [ChargesController::class, 'create']);
+});

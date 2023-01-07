@@ -9,5 +9,9 @@ use App\Entities\Merchant;
  */
 interface MerchantRepositoryInterface extends RepositoryInterface
 {
-
+    /**
+     * @param string $username
+     * @return Merchant|null
+     */
+    public function findByUsername(string $username): ?Merchant;
 }

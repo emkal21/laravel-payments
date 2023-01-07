@@ -10,8 +10,8 @@ use App\Entities\ApiToken;
 interface ApiTokenRepositoryInterface extends RepositoryInterface
 {
     /**
-     * @param string $token
-     * @return ApiToken|null
+     * @param int $merchantId
+     * @return ApiToken[]
      */
-    public function findByToken(string $token): ?ApiToken;
+    public function getByMerchantId(int $merchantId): array;
 }
