@@ -72,8 +72,25 @@ class ApiTokensService
      * @param ApiToken $apiToken
      * @return void
      */
+    public function save(ApiToken $apiToken): void
+    {
+        $this->apiTokenRepository->save($apiToken);
+    }
+
+    /**
+     * @param ApiToken $apiToken
+     * @return void
+     */
     public function delete(ApiToken $apiToken): void
     {
         $this->apiTokenRepository->delete($apiToken);
+    }
+
+    /**
+     * @return void
+     */
+    public function truncate(): void
+    {
+        $this->apiTokenRepository->truncate();
     }
 }

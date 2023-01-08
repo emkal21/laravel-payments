@@ -58,4 +58,12 @@ class MerchantsService
     {
         $this->merchantRepository->delete($merchant);
     }
+
+    /**
+     * @return void
+     */
+    public function truncate(): void
+    {
+        $this->merchantRepository->truncate();
+    }
 }

@@ -1,0 +1,88 @@
+{
+	"info": {
+		"_postman_id": "c0ea87b5-2862-4dbd-8d87-4d22af24d89d",
+		"name": "laravel-payments",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "577589"
+	},
+	"item": [
+		{
+			"name": "/charges",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"card\": {\n        \"card_number\": \"4200000000000000\",\n        \"expiration_date\": \"12/2023\",\n        \"cvv\": \"123\",\n        \"cardholder_name\": \"John Doe\"\n    },\n    \"customer\": {\n        \"email\": \"email@email.com\",\n        \"address_line_1\": \"Test address\",\n        \"address_city\": \"Test city\",\n        \"address_country\": \"GR\"\n    },\n    \"amount\": 100,\n    \"description\": \"Test description\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BASE_URL}}/charges",
+					"host": [
+						"{{BASE_URL}}"
+					],
+					"path": [
+						"charges"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": [
+			{
+				"key": "password",
+				"value": "{{API_TOKEN}}",
+				"type": "string"
+			},
+			{
+				"key": "username",
+				"value": "{{USERNAME}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASE_URL",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "USERNAME",
+			"value": "test_stripe",
+			"type": "string"
+		},
+		{
+			"key": "API_TOKEN",
+			"value": "382aa5eb-82e6-4b26-8e95-333bb0fb0f3a",
+			"type": "string"
+		}
+	]
+}

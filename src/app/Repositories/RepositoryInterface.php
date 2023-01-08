@@ -43,4 +43,9 @@ interface RepositoryInterface
      * @return void
      */
     public function delete($entity): void;
+
+    /**
+     * @return void
+     */
+    public function truncate(): void;
 }

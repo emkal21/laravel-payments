@@ -2,12 +2,14 @@
     {
         "name": "Test Merchant (Stripe)",
         "username": "test_stripe",
+        "apiToken": "secret-api-token",
         "preferredPaymentService": "stripe",
         "paymentServiceSecretKey": "sk_test_51MMyvQKAVYAD5aComGJWxuPpu37sgc6QL8kJPYXBYHxOXgOdYjM4b7VCkrU1eb87XNnlq4Nn5OVFhEdQwkSKUrBy00NfFQcMYK"
     },
     {
         "name": "Test Merchant (PinPayments)",
         "username": "test_pinpayments",
+        "apiToken": "secret-api-token",
         "preferredPaymentService": "pinpayments",
         "paymentServiceSecretKey": "zRYH4bzejEZZv-sG09giRg"
     }

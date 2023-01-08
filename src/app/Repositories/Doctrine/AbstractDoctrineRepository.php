@@ -4,6 +4,7 @@ namespace App\Repositories\Doctrine;
 
 use App\Entities\AbstractEntity;
 use App\Repositories\RepositoryInterface;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -107,6 +108,22 @@ abstract class AbstractDoctrineRepository implements RepositoryInterface
     {
         $this->entityManager->remove($entity);
         $this->entityManager->flush();
+    }
+
+    /**
+     * @return void
+     * @throws Exception
+     */
+    public function truncate(): void
+    {
+        $entityClass = $this->getEntityClass();
+        $classMetadata = $this->entityManager->getClassMetadata($entityClass);
+        $connection = $this->entityManager->getConnection();
+        $databasePlatform = $connection->getDatabasePlatform();
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=0');
+        $sql = $databasePlatform->getTruncateTableSql($classMetadata->getTableName());
+        $connection->executeQuery($sql);
+        $connection->executeQuery('SET FOREIGN_KEY_CHECKS=1');
     }
 
     /**

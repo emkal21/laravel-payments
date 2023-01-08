@@ -2,18 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Entities\ApiToken;
-use App\Entities\Merchant;
 use App\Exceptions\FileNotFoundException;
 use App\Exceptions\FileUnreadableException;
 use App\Exceptions\IllegalArgumentException;
-use App\Services\ApiTokensService;
-use App\Services\MerchantsService;
-use DateInterval;
-use DateTime;
+use App\Services\MerchantsImportService;
 use Illuminate\Console\Command;
-use Illuminate\Support\Arr;
-use Ramsey\Uuid\Uuid;
 
 class InitializeMerchants extends Command
 {
@@ -31,11 +24,8 @@ class InitializeMerchants extends Command
      */
     protected $description = 'Creates test merchants and API tokens.';
 
-    /** @var MerchantsService $merchantsService */
-    private $merchantsService;
-
-    /** @var ApiTokensService $apiTokensService */
-    private $apiTokensService;
+    /** @var MerchantsImportService $merchantsImportService */
+    private $merchantsImportService;
 
     /**
      * Create a new command instance.
@@ -43,95 +33,11 @@ class InitializeMerchants extends Command
      * @return void
      */
     public function __construct(
-        MerchantsService $merchantsService,
-        ApiTokensService $apiTokensService
+        MerchantsImportService $merchantsImportService
     ) {
         parent::__construct();
 
-        $this->merchantsService = $merchantsService;
-        $this->apiTokensService = $apiTokensService;
-    }
-
-    /**
-     * @return array
-     * @throws FileNotFoundException
-     * @throws FileUnreadableException
-     */
-    private function getMerchantsFromFile(): array
-    {
-        $merchantsFilePath = base_path('test-data/merchants.json');
-
-        if (!file_exists($merchantsFilePath)) {
-            throw new FileNotFoundException('Merchants file cannot be found.');
-        }
-
-        $merchantsData = file_get_contents($merchantsFilePath);
-
-        $merchants = json_decode($merchantsData, true);
-
-        if ($merchants === null) {
-            throw new FileUnreadableException('Merchants file cannot be read.');
-        }
-
-        return $merchants;
-    }
-
-    /**
-     * @param array $data
-     * @return Merchant
-     * @throws IllegalArgumentException
-     */
-    private function createMerchant(array $data): Merchant
-    {
-        $name = Arr::get(
-            $data,
-            'name',
-            ''
-        );
-
-        $username = Arr::get(
-            $data,
-            'username',
-            ''
-        );
-
-        $preferredPaymentService = Arr::get(
-            $data,
-            'preferredPaymentService',
-            ''
-        );
-
-        $paymentServiceSecretKey = Arr::get(
-            $data,
-            'paymentServiceSecretKey',
-            ''
-        );
-
-        $merchant = new Merchant(
-            $name,
-            $username,
-            $preferredPaymentService,
-            $paymentServiceSecretKey
-        );
-
-        $this->merchantsService->save($merchant);
-
-        return $merchant;
-    }
-
-    private function createApiToken(Merchant $merchant): ApiToken
-    {
-        $token = (string)Uuid::uuid4();
-
-        $interval = DateInterval::createFromDateString('1 year');
-
-        $expiresAt = (new DateTime())->add($interval);
-
-        $apiToken = new ApiToken($merchant->getId(), $token, $expiresAt);
-
-        $this->apiTokensService->create($apiToken);
-
-        return $apiToken;
+        $this->merchantsImportService = $merchantsImportService;
     }
 
     /**
@@ -144,24 +50,20 @@ class InitializeMerchants extends Command
      */
     public function handle(): int
     {
-        $merchants = $this->getMerchantsFromFile();
+        $path = 'test-data/merchants.json';
 
-        $merchantCredentials = [];
-        $nameHeading = 'name';
-        $usernameHeading = 'username';
-        $apiTokenHeading = 'apiToken';
-        $tableHeadings = [$nameHeading, $usernameHeading, $apiTokenHeading];
+        $merchantCredentials = $this
+            ->merchantsImportService
+            ->importFromFile($path);
 
-        foreach ($merchants as $merchantData) {
-            $merchant = $this->createMerchant($merchantData);
-            $apiToken = $this->createApiToken($merchant);
-
-            $merchantCredentials[] = [
-                $nameHeading => $merchant->getName(),
-                $usernameHeading => $merchant->getUsername(),
-                $apiTokenHeading => $apiToken->getToken(),
-            ];
-        }
+        $tableHeadings = [
+            'merchantId',
+            'name',
+            'paymentGateway',
+            'username',
+            'apiTokenId',
+            'apiToken',
+        ];
 
         $this->info('Test merchants have been successfully created!');
 
